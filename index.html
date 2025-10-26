@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery Methods Test</title>
+    
+    <!-- --- Task 0: Setup --- -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>
+    
+    <style>
+        /* Basic styling for visibility */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+            /* NEW: Added a subtle gradient background */
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #18181b;
+            padding: 1rem;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 2rem 3rem;
+            border-radius: 0.75rem; /* NEW: Slightly more rounded */
+            /* NEW: Deeper, softer shadow */
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            width: 90%;
+            max-width: 600px;
+        }
+        h2 {
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 5px;
+            margin-top: 2rem;
+        }
+        button {
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 4px 2px;
+            font-size: 14px;
+            /* NEW: Added transform and shadow to transition */
+            transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            background-color: #4338ca;
+            /* NEW: Added lift and shadow on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(67, 56, 202, 0.2);
+        }
+        .button-group {
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* --- Task 3: Fade Methods --- */
+        #fade-target {
+            display: none; /* Start hidden for fadeIn */
+            border-radius: 8px;
+            margin-top: 10px;
+            max-width: 100%;
+        }
+
+        /* --- Task 4: Slide Methods --- */
+        #slide-header {
+            cursor: pointer;
+            background: #e5e7eb;
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        #slide-panel {
+            padding: 20px;
+            border: 1px solid #d1d5db;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            display: none; /* Start hidden for slideDown */
+            background: #f9fafb;
+        }
+
+        /* --- Task 5: Add & Remove Elements --- */
+        #item-list {
+            list-style: decimal;
+            background: #f9fafb;
+            padding: 20px 40px;
+            border-radius: 4px;
+            border: 1px solid #e5e7eb;
+        }
+        #item-list li {
+            padding: 5px 0;
+        }
+
+        /* --- Task 6: Modifying Attributes --- */
+        #attr-image {
+            max-width: 100%;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+            margin-top: 10px;
+        }
+        #attr-link {
+            font-size: 1.1rem;
+            color: #4f46e5;
+            font-weight: 500;
+        }
+
+        /* --- Task 7: Form Interaction --- */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 95%;
+            padding: 8px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        #live-output {
+            background: #fefce8; /* Light yellow */
+            border: 1px solid #fde047; /* Yellow */
+            padding: 15px;
+            border-radius: 4px;
+        }
+        #live-output span {
+            font-weight: bold;
+            color: #713f12; /* Brown */
+        }
+        
+        /* --- Task 8, 9, 10: Animation --- */
+        #animation-wrapper {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            height: 250px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        #animate-box {
+            width: 100px;
+            height: 100px;
+            background-color: #ef4444; /* Red */
+            position: relative; /* Required for left/top animation */
+            /* Added styles for centering text */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        #btn-animate-reset {
+            background-color: #f97316; /* Orange */
+        }
+        #btn-animate-reset:hover {
+            background-color: #ea580c;
+        }
+        
+        /* --- Task 11: Bouncing Ball --- */
+        #bounce-wrapper {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            height: 300px;
+            padding: 0;
+            border-radius: 4px;
+            position: relative; /* Container for the ball */
+            overflow: hidden; /* Keep the ball inside */
+            margin-bottom: 1rem;
+        }
+        #ball {
+            width: 40px;
+            height: 40px;
+            background: #2563eb; /* Blue */
+            border-radius: 50%; /* Make it round */
+            position: absolute; /* Needed for animation */
+            top: 50px;
+            left: 100px;
+        }
+        #btn-stop-bounce {
+            background-color: #dc2626; /* Red */
+        }
+        #btn-stop-bounce:hover {
+            background-color: #b91c1c;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- --- Task 1: Selectors & CSS --- -->
+        <h1 id="title">Original Title</h1>
+        
+        <p>This is a paragraph. It will be styled by the tag selector.</p>
+        
+        <div class="content-box">
+            <p>Original content inside the box.</p>
+        </div>
+        
+        <p>This is another paragraph. It will also be styled.</p>
+
+        <div class="content-box">
+            <p>Another original content box.</p>
+        </div>
+
+        <!-- --- Task 2: Visibility Methods --- -->
+        <h2>Task 2: Visibility</h2>
+        <p id="visibility-target">This paragraph can be hidden or shown.</p>
+        <div class="button-group">
+            <button id="btn-hide">Hide</button>
+            <button id="btn-show">Show</button>
+            <button id="btn-toggle-visibility">Toggle</button>
+        </div>
+
+        <!-- --- Task 3: Fade Methods --- -->
+        <h2>Task 3: Fading</h2>
+        <img id="fade-target" src="https://placehold.co/400x200/a78bfa/1e1b4b?text=jQuery+Image" alt="Placeholder Image">
+        <div class="button-group">
+            <button id="btn-fade-in">Fade In</button>
+            <button id="btn-fade-out">Fade Out</button>
+            <button id="btn-fade-toggle">Fade Toggle</button>
+        </div>
+
+        <!-- --- Task 4: Slide Methods --- -->
+        <h2>Task 4: Sliding</h2>
+        <div id="slide-header">Click to Toggle Panel (.slideToggle)</div>
+        <div id="slide-panel">
+            <p>This panel slides up and down. It's great for accordions, "read more" sections, or collapsible menus.</p>
+        </div>
+        <div class="button-group">
+            <button id="btn-slide-up">Slide Up (.slideUp)</button>
+            <button id="btn-slide-down">Slide Down (.slideDown)</button>
+        </div>
+
+        <!-- --- Task 5: Add & Remove Elements --- -->
+        <h2>Task 5: Add & Remove Elements</h2>
+        <ul id="item-list">
+            <li>Initial Item 1</li>
+            <li>Initial Item 2</li>
+        </ul>
+        <div class="button-group">
+            <button id="btn-add-append">Append Item</button>
+            <button id="btn-add-prepend">Prepend Item</button>
+            <button id="btn-remove-last">Remove Last Item</button>
+        </div>
+
+        <!-- --- Task 6: Modifying Attributes --- -->
+        <h2>Task 6: Modifying Attributes</h2>
+        <a id="attr-link" href="https://google.com" target="_blank">Go to Google</a>
+        <br>
+        <img id="attr-image" src="https://placehold.co/400x150/fca5a5/7f1d1d?text=Image+1" alt="Placeholder Image 1">
+        <div class="button-group">
+            <button id="btn-change-img">Change Image</button>
+            <button id="btn-change-link">Change Link to Bing</button>
+        </div>
+
+        <!-- --- Task 7: Form Interaction --- -->
+        <h2>Task 7: Form Interaction</h2>
+        <form id="live-form">
+            <div class="form-group">
+                <label for="input-name">Name:</label>
+                <input type="text" id="input-name" placeholder="Enter your name...">
+            </div>
+            <div class="form-group">
+                <label for="input-email">Email:</label>
+                <input type="email" id="input-email" placeholder="Enter your email...">
+            </div>
+        </form>
+        <div id="live-output">
+            <p>Live Name: <span id="output-name"></span></p>
+            <p>Live Email: <span id="output-email"></span></p>
+        </div>
+
+        <!-- --- Task 8, 9, 10: Animation --- -->
+        <h2>Task 8-10: Animation</h2>
+        <div id="animation-wrapper">
+            <div id="animate-box">Box</div>
+        </div>
+        <div class="button-group">
+            <button id="btn-animate-basic">Task 8: Basic</button>
+            <button id="btn-animate-sequential">Task 9: Sequential</button>
+            <button id="btn-animate-combined">Task 10: Combined</button>
+            <button id="btn-animate-reset">Reset</button>
+        </div>
+        
+        <!-- --- Task 11: Bouncing Ball --- -->
+        <h2>Task 11: Bouncing Ball</h2>
+        <div id="bounce-wrapper">
+            <div id="ball"></div>
+        </div>
+        <div class="button-group">
+            <button id="btn-start-bounce">Start</button>
+            <button id="btn-stop-bounce">Stop</button>
+        </div>
+
+    </div>
+
+    <!-- --- Task 0: Setup --- -->
+    <script src="script.js"></script>
+
+</body>
+</html>
+
